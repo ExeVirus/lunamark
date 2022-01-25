@@ -6,7 +6,9 @@
 local M = {}
 local cosmo = require("cosmo")
 local rep  = string.rep
-local lpeg = require("lpeg")
+-- Change lpeg to LuLPeg when applicable
+lpeg = require"lunamark/lulpeg"
+
 local Cs, P, S, lpegmatch = lpeg.Cs, lpeg.P, lpeg.S, lpeg.match
 local any = lpeg.P(1)
 

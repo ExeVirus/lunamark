@@ -1,9 +1,0 @@
-lunamark
-<<<
-> bar
-baz
-> foo
->>>
-<blockquote>
-<p>bar baz foo</p>
-</blockquote>

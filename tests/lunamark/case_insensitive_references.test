@@ -1,7 +1,0 @@
-lunamark
-<<<
-[hI]
-
-[Hi]: /foo
->>>
-<p><a href="/foo">hI</a></p>

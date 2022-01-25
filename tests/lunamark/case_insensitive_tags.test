@@ -1,9 +1,0 @@
-lunamark
-<<<
-<diV>hi</Div>
-
-And <A href="/foo">anchor</a>.
->>>
-<diV>hi</Div>
-
-<p>And <A href="/foo">anchor</a>.</p>

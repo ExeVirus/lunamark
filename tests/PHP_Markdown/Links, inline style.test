@@ -1,6 +1,0 @@
-lunamark
-<<<
-[silly URL w/ angle brackets](<?}]*+|&)>).
-
->>>
-<p><a href="?}]*+|&amp;)">silly URL w/ angle brackets</a>.</p>

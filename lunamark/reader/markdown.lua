@@ -2,7 +2,7 @@
 -- See the file LICENSE in the source for details.
 
 local util = require("lunamark.util")
-local lpeg = require("lpeg")
+lpeg = require"lunamark/lulpeg"
 local entities = require("lunamark.entities")
 local lower, upper, gsub, format, length =
   string.lower, string.upper, string.gsub, string.format, string.len
@@ -18,6 +18,9 @@ local utf8_lower do
   elseif pcall(require, "unicode") then -- try slnunicode
     local slnunicde = require "unicode"
     utf8_lower = slnunicde.utf8.lower
+  elseif pcall(require, "utf8/init") then -- try slnunicode
+    local utf8_lower = require("utf8/init"):init()
+    utf8_lower = utf8_lower.lower
   else
     error "no unicode library found"
   end
@@ -908,7 +911,7 @@ function M.new(writer, options)
     larsers.headerstart = parsers.fail
   else
     larsers.headerstart = parsers.hash
-                        + (parsers.line * (parsers.equal^1 + parsers.dash^1)
+                        + (parsers.line * (parsers.equal^1 + parsers.dash^2)
                         * parsers.optionalspace * parsers.newline)
   end
 
@@ -1072,7 +1075,7 @@ function M.new(writer, options)
   larsers.Paragraph    = parsers.nonindentspace * Ct(parsers.Inline^1)
                        * parsers.newline
                        * ( parsers.blankline^1
-                         + #parsers.hash
+                         + parsers.hash
                          + #(parsers.leader * parsers.more * parsers.space^-1)
                          )
                        / writer.paragraph
