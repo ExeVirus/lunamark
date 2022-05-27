@@ -1027,8 +1027,8 @@ function M.new(writer, options)
   larsers.Citations     = larsers.TextCitations + larsers.ParenthesizedCitations
 
   -- avoid parsing long strings of * or _ as emph/strong
-  larsers.UlOrStarLine  = (parsers.asterisk * parsers.asterisk * parsers.asterisk * parsers.asterisk^-200) 
-                        + (parsers.underscore * parsers.underscore * parsers.underscore * parsers.underscore^-200)
+  larsers.UlOrStarLine  = (parsers.asterisk * parsers.asterisk * parsers.asterisk * parsers.asterisk^-6969) 
+                        + (parsers.underscore * parsers.underscore * parsers.underscore * parsers.underscore^-6969)
                         / writer.string
   
   larsers.EscapedChar   = S("\\") * C(parsers.escapable) / writer.string
