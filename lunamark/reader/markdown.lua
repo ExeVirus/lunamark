@@ -2,7 +2,7 @@
 -- See the file LICENSE in the source for details.
 
 local util = require("lunamark.util")
-lpeg = require"lunamark/lulpeg"
+local lpeg = require"lunamark/lulpeg"
 local entities = require("lunamark.entities")
 local lower, upper, gsub, format, length =
   string.lower, string.upper, string.gsub, string.format, string.len
@@ -1027,7 +1027,8 @@ function M.new(writer, options)
   larsers.Citations     = larsers.TextCitations + larsers.ParenthesizedCitations
 
   -- avoid parsing long strings of * or _ as emph/strong
-  larsers.UlOrStarLine  = parsers.asterisk^4 + parsers.underscore^4
+  larsers.UlOrStarLine  = (parsers.asterisk * parsers.asterisk * parsers.asterisk * parsers.asterisk^-200) 
+                        + (parsers.underscore * parsers.underscore * parsers.underscore * parsers.underscore^-200)
                         / writer.string
   
   larsers.EscapedChar   = S("\\") * C(parsers.escapable) / writer.string
