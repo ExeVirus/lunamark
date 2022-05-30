@@ -1,6 +1,6 @@
-local lunamark = require("lunamark")
-local writer = lunamark.writer.html.new()
-local parse = lunamark.reader.markdown.new(writer, { smart = false })
+--local lunamark = require("lunamark")
+--local writer = lunamark.writer.html.new()
+--local parse = lunamark.reader.markdown.new(writer, { smart = false })
 to_parse = [[
 # Markdown: Syntax
 
@@ -315,5 +315,6 @@ normal paragraph. For example:
 Use the `printf()` function.
     
 ]]
-local result, metadata = parse(to_parse)
-print(result)
+
+dofile("init.lua")
+print(md2f.md2f(1,1,5,5,"# Hello World\n\nI am an example!\n\n**BOLD** *Italics*\n",nil))
