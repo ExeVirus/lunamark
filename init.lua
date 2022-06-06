@@ -31,6 +31,9 @@ md2f.md2f = function(x,y,w,h,text,name,settings)
         return ""
     end
     name = name or "markdown"
+    settings = settings or {}
+    settings.width = w
+    settings.height = h
     return "hypertext["..x..","..y..";"..w..","..h..";"..name..";"..parse(text,settings).."]"
 end
 

@@ -317,4 +317,15 @@ Use the `printf()` function.
 ]]
 
 dofile("init.lua")
-print(md2f.md2f(1,1,5,5,"# Hello World\n\nI am an example!\n\n**BOLD** *Italics*\n",nil))
+print(md2f.md2f(1,1,5,5,[[
+# Example to test
+
+These should be escaped: ]  ;  < 
+
+---
+
+**BOLD** 
+
+*Italics*
+
+]],nil))

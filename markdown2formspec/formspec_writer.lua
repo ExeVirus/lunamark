@@ -15,6 +15,20 @@ function M.new(options, settings)
   options = options or {}
   local Hyper = generic.new(options)
 
+  local escape = util.escaper {
+    ["<"] = "\\<",
+    [";"] = "\\\\;",
+    ["]"] = "\\\\]",
+  }
+
+  Hyper.string = escape
+
+  Hyper.citation = escape
+
+  Hyper.code = escape
+
+  Hyper.hrule = "<img name=md2f_line.png width="..(60*settings.width).." height=4>"
+
   return Hyper
 end
 

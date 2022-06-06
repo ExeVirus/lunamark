@@ -24,7 +24,8 @@ local function parse(text,settings)
 
     --Load markdown to hypertext read-writer
     local writer = require("../markdown2formspec/formspec_writer").new(nil, settings)
-    local formspec_parse = lunamark.reader.markdown.new(writer, { smart = false })
+    
+    local formspec_parse = lunamark.reader.markdown.new(writer, { smart = false} )
     
     --execute read-write of provided text
     return formspec_parse(text, settings)
