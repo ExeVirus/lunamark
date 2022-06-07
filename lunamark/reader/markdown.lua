@@ -105,6 +105,8 @@ parsers.internal_punctuation   = S(":;,.?")
 
 parsers.doubleasterisks        = P("**")
 parsers.doubleunderscores      = P("__")
+parsers.tripleasterisks        = P("***")
+parsers.tripleunderscores      = P("___")
 parsers.fourspaces             = P("    ")
 
 parsers.any                    = P(1)
@@ -952,6 +954,12 @@ function M.new(writer, options)
                     + parsers.spacechar^1 * larsers.Endline^-1
                                           * parsers.optionalspace / writer.nbsp
 
+  larsers.Strong_Emphasis = ( parsers.between(parsers.Inline, parsers.tripleasterisks,
+                                          parsers.tripleasterisks)
+                            + parsers.between(parsers.Inline, parsers.tripleunderscores,
+                                          parsers.tripleunderscores)
+                            ) / writer.strong_emphasis
+
   larsers.Strong = ( parsers.between(parsers.Inline, parsers.doubleasterisks,
                                      parsers.doubleasterisks)
                    + parsers.between(parsers.Inline, parsers.doubleunderscores,
@@ -1287,6 +1295,7 @@ function M.new(writer, options)
       Inline                = V("Str")
                             + V("Space")
                             + V("Endline")
+                            + V("Strong_Emphasis")
                             + V("UlOrStarLine")
                             + V("Strong")
                             + V("Emph")
@@ -1307,6 +1316,7 @@ function M.new(writer, options)
       Str                   = larsers.Str,
       Space                 = larsers.Space,
       Endline               = larsers.Endline,
+      Strong_Emphasis       = larsers.Strong_Emphasis,
       UlOrStarLine          = larsers.UlOrStarLine,
       Strong                = larsers.Strong,
       Emph                  = larsers.Emph,

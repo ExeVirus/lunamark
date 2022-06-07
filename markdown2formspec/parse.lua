@@ -5,6 +5,7 @@ local function parse(text,settings)
     settings = settings or {}
     settings.background_color = settings.background_color or "#bababa25"
     settings.font_color = settings.font_color or "#FFF"
+    settings.link_color = settings.link_color or "#77AAFF"
     settings.heading_1_color = settings.heading_1_color or "#AFA"
     settings.heading_2_color = settings.heading_2_color or "#FAA"
     settings.heading_3_color = settings.heading_3_color or "#AAF"
