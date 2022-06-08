@@ -1913,84 +1913,86 @@ And:
 ]=]
 
 dofile("init.lua")
--- print(md2f.header()..md2f.md2f(1,1,18,18,[[
--- # Level 1
--- ## Level 2
--- ### Level 3
--- #### Level 4
--- ##### Level 5
--- ###### Level 6
+print(md2f.header()..md2f.md2f(1,1,18,18,[[
+# Level 1
+## Level 2
+### Level 3
+#### Level 4
+##### Level 5
+###### Level 6
 
 
 
 
--- Paragraph 1 is a test paragaph, hopefully this is long enough to justify going to the next few lines.
+Paragraph 1 is a test paragaph, hopefully this is long enough to justify going to the next few lines.
 
 
 
 
--- This is another paragraph, should have worked.
+This is another paragraph, should have worked.
 
 
 
 
--- ```
--- int a = 5;
--- std::cout << a << std::endl;
--- ```
+```
+int a = 5;
+std::cout << a << std::endl;
+```
 
--- **Bold Text**
+**Bold Text**
 
--- *Italics Text*
+*Italics Text*
 
--- ***Bold and Italics***
+***Bold and Italics***
 
--- > Block quote attempt
+****Ultra Bold and Italics****
 
--- > Multiline, and multi paragraph
--- >
--- > Block Quote
+> Block quote attempt
 
--- 1. Numbers will
--- 3. Be Somewhat difficult
--- 2. To support
+> Multiline, and multi paragraph
+>
+> Block Quote
 
--- - Unordered
--- - Lists
--- - Should be a breeze, hopefully
--- * Personally, 
--- * I think this should start a new 
--- * list set
+1. Numbers will
+3. Be Somewhat difficult
+2. To support
+
+- Unordered
+- Lists
+- Should be a breeze, hopefully
+* Personally, 
+* I think this should start a new 
+* list set
 
 
--- `test`
--- `test`
+`test`
+`test`
 
--- ![24,24,l](text)
--- ![36,36,r](text2)
--- ![48,48](item:///text3)
+![24,24,l](text)
+![36,36,r](text2)
+![48,48](item:///text3)
 
--- Nested `code text` should be monospaced
+Nested `code text` should be monospaced
 
--- These
+These
 
--- --- 
+--- 
 
--- Should
+Should
 
--- *** 
+*** 
 
--- All be lines
+All be lines
 
--- _______
+_______
 
--- <htts://www.google.com>
+<htts://www.google.com>
 
--- ----------
+----------
 
--- ----------
+----------
 
--- ]],nil))
+]],nil))
 
 -- For Stress Testing, ensuring nothing can error out the program
 -- math.randomseed(1)
@@ -2007,4 +2009,4 @@ dofile("init.lua")
 --     md2f.md2f(1,1,18,18,str,nil)
 -- end
 
-print(md2f.md2f(1,1,18,18,to_parse,nil))
+--print(md2f.md2f(1,1,18,18,to_parse,nil))

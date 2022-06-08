@@ -1035,8 +1035,8 @@ function M.new(writer, options)
   larsers.Citations     = larsers.TextCitations + larsers.ParenthesizedCitations
 
   -- avoid parsing long strings of * or _ as emph/strong
-  larsers.UlOrStarLine  = (parsers.asterisk * parsers.asterisk * parsers.asterisk * parsers.asterisk^-6969) 
-                        + (parsers.underscore * parsers.underscore * parsers.underscore * parsers.underscore^-6969)
+  larsers.UlOrStarLine  = (parsers.asterisk * parsers.asterisk * parsers.asterisk * parsers.asterisk * parsers.asterisk^-6969) 
+                        + (parsers.underscore * parsers.underscore * parsers.underscore * parsers.underscore * parsers.underscore^-6969)
                         / writer.string
   
   larsers.EscapedChar   = S("\\") * C(parsers.escapable) / writer.string
@@ -1295,8 +1295,8 @@ function M.new(writer, options)
       Inline                = V("Str")
                             + V("Space")
                             + V("Endline")
-                            + V("Strong_Emphasis")
                             + V("UlOrStarLine")
+                            + V("Strong_Emphasis")
                             + V("Strong")
                             + V("Emph")
                             + V("InlineNote")
