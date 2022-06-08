@@ -19,8 +19,8 @@ local utf8_lower do
     local slnunicde = require "unicode"
     utf8_lower = slnunicde.utf8.lower
   elseif pcall(require, "utf8/init") then -- try slnunicode
-    local utf8_lower = require("utf8/init"):init()
-    utf8_lower = utf8_lower.lower
+    local utf8 = require("utf8/init"):init()
+    utf8_lower = utf8.lower
   else
     error "no unicode library found"
   end
@@ -48,10 +48,10 @@ local M = {}
 
 local rope_to_string = util.rope_to_string
 
--- Normalize a markdown reference tag.  (Make lowercase, and collapse
+-- Normalize a markdown reference tag.  (collapse
 -- adjacent whitespace characters.)
 local function normalize_tag(tag)
-  return utf8_lower(gsub(rope_to_string(tag), "[ \n\r\t]+", " "))
+  return gsub(rope_to_string(tag), "[ \n\r\t]+", " ")
 end
 
 ------------------------------------------------------------------------------
@@ -676,7 +676,7 @@ function M.new(writer, options)
     return function(str)
       local res = lpeg.match(grammar(), str)
       if res == nil then
-        error(format("%s failed on:\n%s", name, str:sub(1,20)))
+        return format("Parsing Markdown File: failed on:\n%s", name, str:sub(1,20))
       else
         return res
       end

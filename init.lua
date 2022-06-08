@@ -34,7 +34,7 @@ md2f.md2f = function(x,y,w,h,text,name,settings)
     settings = settings or {}
     settings.width = w
     settings.height = h
-    return "hypertext["..x..","..y..";"..w..","..h..";"..name..";"..parse(text,settings).."]"
+    return table.concat({"hypertext[",x,",",y,";",w,",",h,";",name,";",parse(text,settings),"]"})
 end
 
 -- md2ff()
