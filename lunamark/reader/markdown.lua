@@ -834,9 +834,9 @@ function M.new(writer, options)
           tagpart = ""
       elseif tag == "" then
           tag = label
-          tagpart = "[]"
+          tagpart = "[\\]"
       else
-          tagpart = {"[", parse_inlines(tag), "]"}
+          tagpart = {"[", parse_inlines(tag), "\\]"}
       end
       if sps then
         tagpart = {sps, tagpart}
@@ -845,7 +845,7 @@ function M.new(writer, options)
       if r then
         return r
       else
-        return nil, {"[", parse_inlines(label), "]", tagpart}
+        return nil, {"[", parse_inlines(label), "\\]", tagpart}
       end
   end
 
@@ -879,7 +879,7 @@ function M.new(writer, options)
   -- Inline elements (local)
   ------------------------------------------------------------------------------
 
-  larsers.Str      = larsers.normalchar^1 / writer.string
+  larsers.Str      = (larsers.normalchar^1 * (larsers.specialchar * larsers.normalchar^1)^1 + larsers.normalchar^1) / writer.string
 
   larsers.Ellipsis = P("...") / writer.ellipsis
   

@@ -8,6 +8,11 @@ local M = {}
 
 local generic = require("../lunamark.writer.generic")
 local util = require("../lunamark.util")
+local nbsp = string.format("%s","\160")
+local tab = nbsp..nbsp..nbsp..nbsp
+local newlinetab = "\n" .. tab
+local ctab = tab
+local cnewlinetab = "\n" .. ctab
 
 --- Returns a new Hypertext writer.
 -- For a list of fields, see [lunamark.writer.generic].
@@ -17,7 +22,7 @@ function M.new(options)
   local Hyper = generic.new(options)
 
   local escape = util.escaper {
-    ["<"] = "\\<",
+    ["<"] = "\\\\<",
     [";"] = "\\;",
     ["]"] = "\\]",
   }
@@ -26,12 +31,18 @@ function M.new(options)
 
   Hyper.string = escape
   Hyper.citation = escape
+  Hyper.verbatim = function(s)
+    local _, count = string.gsub(s, "\n", "")
+    return table.concat({"<mono><style color=",md2f.settings.code_block_mono_color," size=",md2f.settings.code_block_font_size,">",
+                          ctab,escape(s):gsub("\n",cnewlinetab,count-1),
+                        "</style></mono>"})
+  end
   function Hyper.code(s)
     return {"<mono><style color=",md2f.settings.mono_color,">",escape(s),"</style></mono>"}
   end
 
   function Hyper.fenced_code(s)
-    return {"<mono><style color=",md2f.settings.code_block_mono_color," size=",md2f.settings.code_block_mono_size,">",escape(s),"</style></mono>"}
+    return Hyper.verbatim(escape(s))
   end
   
   function Hyper.start_document()
@@ -55,8 +66,15 @@ function M.new(options)
   end
 
   function Hyper.blockquote(s)
-    return {"<img name=md2f_line.png width=",38*md2f.settings.width," height=5>",Hyper.linebreak,
-            "<style color=",md2f.settings.block_quote_color,">", s, "</style>",Hyper.linebreak,"<img name=md2f_line.png width=",38*md2f.settings.width," height=5>"}
+    --tab over 4 spaces for offset
+    table.insert(s[1],1,tab)
+    for i=2,#s,1 do
+      if s[i] == "\n" then
+        s[i] = newlinetab
+      end
+    end
+
+    return {"<style color=",md2f.settings.block_quote_color,">", s, "</style>"}
   end
 
   function Hyper.bulletlist(items,tight)
