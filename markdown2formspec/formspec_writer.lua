@@ -11,7 +11,7 @@ local util = require("../lunamark.util")
 local nbsp = string.format("%s","\160")
 local tab = nbsp..nbsp..nbsp..nbsp
 local newlinetab = "\n" .. tab
-local ctab = tab
+local ctab = nbsp .. nbsp
 local cnewlinetab = "\n" .. ctab
 
 --- Returns a new Hypertext writer.
@@ -42,7 +42,7 @@ function M.new(options)
   end
 
   function Hyper.fenced_code(s)
-    return Hyper.verbatim(escape(s))
+    return Hyper.verbatim(s)
   end
   
   function Hyper.start_document()

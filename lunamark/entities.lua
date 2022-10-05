@@ -5,25 +5,8 @@
 
 local M = {}
 
-local utf8_char do
-  if utf8 then
-    utf8_char = utf8.char
-  elseif pcall(require, "compat53.module") then
-    local utf8 = require "compat53.module".utf8
-    utf8_char = utf8.char
-  elseif pcall(require, "lua-utf8") then -- try luautf8
-    local luautf8 = require("lua-utf8")
-    utf8_char = luautf8.char
-  elseif pcall(require, "unicode") then -- try slnunicode
-    local slnunicode = require "unicode"
-    utf8_char = slnunicode.utf8.char
-  elseif pcall(require, "utf8/init") then -- try slnunicode
-    local utf8_lua = require("utf8/init"):init()
-    utf8_char = utf8_lua.char
-  else
-    error "no unicode library found"
-  end
-end
+local utf8_lua = require("utf8/init"):init()
+local utf8_char = utf8_lua.char
 
 local character_entities = {
   ["Tab"] = 9,

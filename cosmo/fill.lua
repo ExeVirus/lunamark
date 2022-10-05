@@ -1,7 +1,7 @@
 
 local grammar = require "cosmo.grammar"
 
-module(..., package.seeall)
+local fill = {}
 
 local function is_callable(f)
   if type(f) == "function" then return true end
@@ -112,10 +112,12 @@ function interpreter.template(state, template)
   end
 end
 
-function fill(template, env, opts)
+function fill.fill(template, env, opts)
    opts = opts or {}
    local out = opts.out or {}
    if type(env) == "string" then env = { it = env } end
    interpreter.template({ env = env, out = out }, grammar.ast:match(template))
    return concat(out, opts.delim)
 end
+
+return fill

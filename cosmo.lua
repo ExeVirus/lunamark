@@ -4,8 +4,7 @@ local grammar = require "cosmo.grammar"
 local interpreter = require "cosmo.fill"
 local loadstring = loadstring
 
-module(..., package.seeall)
-
+local cosmo = {}
 yield = coroutine.yield
 
 local preamble = [[
@@ -182,7 +181,7 @@ setmetatable(cache, { __index = function (tab, key)
 				end,
 		      __mode = "v" })
 
-function compile(template, chunkname)
+function cosmo.compile(template, chunkname)
   template = template or ""
   chunkname = chunkname or template
   local compiled_template = cache[template][chunkname]
@@ -195,7 +194,7 @@ end
 
 local filled_templates = {}
 
-function fill(template, env)
+function cosmo.fill(template, env)
    template = template or ""
    local start = template:match("^(%[=*%[)")
    if start then template = template:sub(#start + 1, #template - #start) end
@@ -209,7 +208,7 @@ end
 
 local nop = function () end
 
-function cond(bool, table)
+function cosmo.cond(bool, table)
    if bool then
       return function () yield(table) end
    else
@@ -217,9 +216,9 @@ function cond(bool, table)
    end
 end
 
-f = compile
+cosmo.f = compile
 
-function c(bool)
+function cosmo.c(bool)
    if bool then 
       return function (table)
 		return function () yield(table) end
@@ -229,7 +228,7 @@ function c(bool)
    end
 end
 
-function map(arg, has_block)
+function cosmo.map(arg, has_block)
    if has_block then
       for _, item in ipairs(arg) do
 	 cosmo.yield(item)
@@ -239,11 +238,11 @@ function map(arg, has_block)
    end
 end
 
-function inject(arg)
+function cosmo.inject(arg)
    cosmo.yield(arg)
 end
 
-function cif(arg, has_block)
+function cosmo.cif(arg, has_block)
   if not has_block then error("this selector needs a block") end
   if arg[1] then
     arg._template = 1
@@ -253,7 +252,7 @@ function cif(arg, has_block)
   cosmo.yield(arg)
 end
 
-function concat(arg)
+function cosmo.concat(arg)
   local list, sep = arg[1], arg[2] or ", "
   local size = #list
   for i, e in ipairs(list) do
@@ -275,7 +274,7 @@ function concat(arg)
   end
 end
 
-function make_concat(list)
+function cosmo.make_concat(list)
   return function (arg)
 	   local sep = (arg and arg[1]) or ", "
 	   local size = #list
@@ -299,7 +298,7 @@ function make_concat(list)
 	 end
 end
 
-function cfor(args)
+function cosmo.cfor(args)
   local name, list, args = args[1], args[2], args[3]
   if type(list) == "table" then
     for i, item in ipairs(list) do
@@ -315,3 +314,5 @@ function cfor(args)
     end
   end
 end
+
+return cosmo

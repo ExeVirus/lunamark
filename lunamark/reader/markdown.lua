@@ -11,20 +11,9 @@ local P, R, S, V, C, Cg, Cb, Cmt, Cc, Ct, B, Cs =
   lpeg.Cmt, lpeg.Cc, lpeg.Ct, lpeg.B, lpeg.Cs
 local lpegmatch = lpeg.match
 local expand_tabs_in_line = util.expand_tabs_in_line
-local utf8_lower do
-  if pcall(require, "lua-utf8") then -- try luautf8
-    local luautf8 = require("lua-utf8")
-    utf8_lower = luautf8.lower
-  elseif pcall(require, "unicode") then -- try slnunicode
-    local slnunicde = require "unicode"
-    utf8_lower = slnunicde.utf8.lower
-  elseif pcall(require, "utf8/init") then -- try slnunicode
-    local utf8 = require("utf8/init"):init()
-    utf8_lower = utf8.lower
-  else
-    error "no unicode library found"
-  end
-end
+
+local utf8 = require("utf8/init"):init()
+local utf8_lower = utf8.lower
 
 local load = load -- lua 5.2/5.3 style `load` function
 if _VERSION == "Lua 5.1" then

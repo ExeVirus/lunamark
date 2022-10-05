@@ -2,8 +2,7 @@
 local lpeg = require"lunamark/lulpeg"
 local re = lpeg.re
 
-module(..., package.seeall)
-
+local grammar = {}
 local function parse_selector(selector, env)
   env = env or "env"
   selector = string.sub(selector, 2, #selector)
@@ -150,4 +149,6 @@ local syntax_defs = {
   compilesubtemplate = ast_subtemplate
 }
 
-ast = re.compile(syntax, syntax_defs)
+grammar.ast = re.compile(syntax, syntax_defs)
+
+return grammar

@@ -85,6 +85,10 @@
 
 local G = {}
 
+local expand = function(s)
+    return string.gsub(s, "%.", "/") .. ".lua"
+end
+
 setmetatable(G,{ __index = function(t,name)
                              local mod = require("lunamark." .. name)
                              rawset(t,name,mod)
