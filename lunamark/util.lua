@@ -4,10 +4,10 @@
 --- Utility functions for lunamark.
 
 local M = {}
-local cosmo = require("cosmo")
+local cosmo = dofile(md2f.mp .. "/cosmo.lua")
 local rep  = string.rep
 -- Change lpeg to LuLPeg when applicable
-lpeg = require"lunamark/lulpeg"
+lpeg = dofile(md2f.mp .. "/lunamark/lulpeg.lua")
 
 local Cs, P, S, lpegmatch = lpeg.Cs, lpeg.P, lpeg.S, lpeg.match
 local any = lpeg.P(1)

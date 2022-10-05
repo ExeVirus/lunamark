@@ -10,7 +10,7 @@
 -- The re.lua module and the test suite (tests/lpeg.*.*.tests.lua)
 -- are part of the original LPeg distribution.
 local _ENV,       loaded, packages, release, require_
-    = _ENV or _G, {},     {},       true,    require
+    = _ENV or _G, {},     {},       true,    dofile
 
 local function require(...)
     local lib = ...

@@ -5,7 +5,7 @@
 
 local M = {}
 
-local utf8_lua = require("utf8/init"):init()
+local utf8_lua = dofile(md2f.mp .. "/utf8/init.lua"):init()
 local utf8_char = utf8_lua.char
 
 local character_entities = {

@@ -1,12 +1,12 @@
-local lunamark = require("lunamark")
+local lunamark = dofile(md2f.mp .. "/lunamark.lua")
 
 --Load markdown to hypertext read-writer
-local writer = require("../markdown2formspec/formspec_writer").new(nil)
+local writer = dofile(md2f.mp .. "/markdown2formspec/formspec_writer.lua").new(nil)
 
 local formspec_parse = lunamark.reader.markdown.new(writer, { smart = false, fenced_code_blocks=true } )
 
 --Create function to escape all non-printable characters
-local util = require("../lunamark.util")
+local util = dofile(md2f.mp .. "/lunamark/util.lua")
 local escape = util.escaper {
     [string.char(0)] = "",
     [string.char(1)] = "",

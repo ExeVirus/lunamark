@@ -23,7 +23,7 @@
 --       return s:gsub(".",escaped)
 --     end
 
-local util = require("lunamark.util")
+local util = dofile(md2f.mp .. "/lunamark/util.lua")
 local M = {}
 local W = {}
 

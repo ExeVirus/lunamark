@@ -9,12 +9,13 @@
 -- MIT License
 -- Copyright ExeVirus 2022
 --
-
 -----------------------------------------------------------------------
 ----------------------------global namespace---------------------------
 md2f = {}
 
-local parse = require("markdown2formspec/parse")
+md2f.mp = "C:/Users/ddsal/Desktop/Minetest/minetest-5.6.1-win64/mods/markdown2formspec2"
+
+local parse = dofile(md2f.mp .. "/markdown2formspec/parse.lua")
 
 -- md2f()
 --
@@ -57,3 +58,81 @@ end
 md2f.header = function()
 	return "formspec_version[4]size[20,20]position[0.5,0.5]bgcolor[#111E]\n"
 end
+
+to_parse = [=[
+# Level 1
+## Level 2
+### Level 3
+#### Level 4
+##### Level 5
+###### Level 6
+
+Paragraph 1 is a test paragaph, hopefully this is long enough to justify going to the next few lines.
+
+This is another paragraph, should have worked.
+
+```
+int a = 5;
+std::cout << a << std::endl;
+```
+
+**Bold Text**
+
+*Italics Text*
+
+***Bold and Italics***
+
+> Block quote attempt
+
+> Multiline, and multi paragraph
+>
+> Block Quote
+
+1. Numbers will
+3. Be Somewhat difficult
+2. To support
+
+- Unordered
+- Lists
+- Should be a breeze, hopefully
+* Personally, 
+* I think this should start a new 
+* list set
+
+
+`test`
+`test`
+
+![24,24](text)
+![36,36](text2)
+![48,48](text3)
+
+Nested `code text` should be monospaced
+
+These
+
+--- 
+
+Should
+
+*** 
+
+All be lines
+
+_______
+
+<htts://www.google.com>
+
+----------
+----------
+
+]=]
+
+-- Opens a file in append mode
+file = io.open(md2f.mp .. "/example.spec", "w+")
+
+-- appends a word test to the last line of the file
+file:write(md2f.header()..md2f.md2f(1,1,18,18,to_parse,nil))
+
+-- closes the open file
+io.close(file)

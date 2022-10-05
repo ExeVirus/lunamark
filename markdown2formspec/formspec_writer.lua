@@ -6,13 +6,16 @@
 
 local M = {}
 
-local generic = require("../lunamark.writer.generic")
-local util = require("../lunamark.util")
+local generic = dofile(md2f.mp .. "/lunamark/writer/generic.lua")
+local util = dofile(md2f.mp .. "/lunamark/util.lua")
 local nbsp = string.format("%s","\160")
 local tab = nbsp..nbsp..nbsp..nbsp
 local newlinetab = "\n" .. tab
 local ctab = nbsp .. nbsp
 local cnewlinetab = "\n" .. ctab
+
+minetest = minetest or {}
+minetest.log = minetest.log or print
 
 --- Returns a new Hypertext writer.
 -- For a list of fields, see [lunamark.writer.generic].
@@ -38,10 +41,12 @@ function M.new(options)
                         "</style></mono>"})
   end
   function Hyper.code(s)
+    minetest.log("code")
     return {"<mono><style color=",md2f.settings.mono_color,">",escape(s),"</style></mono>"}
   end
 
   function Hyper.fenced_code(s)
+    minetest.log("fenced_code")
     return Hyper.verbatim(s)
   end
   
@@ -50,22 +55,30 @@ function M.new(options)
   end
 
   function Hyper.emphasis(s)
+    minetest.log("emphasis")
     return {"<i>",s,"</i>"}
   end
 
   function Hyper.strong(s)
+    minetest.log("strong")
     return  {"<b>",s,"</b>"}
   end
 
   function Hyper.strong_emphasis(s)
+    minetest.log("strong emphasis")
     return {"<b><i>",s,"</b></i>"}
   end
 
   function Hyper.header(s,level)
+    if level == 0 then
+      return s
+    end
+    minetest.log("header: " .. level)
     return {"<style size=",md2f.settings[table.concat({"heading_",level,"_size"})]," color=",md2f.settings[table.concat({"heading_",level,"_color"})],">",s,"</style>"}
   end
 
   function Hyper.blockquote(s)
+    minetest.log("blockquote")
     --tab over 4 spaces for offset
     table.insert(s[1],1,tab)
     for i=2,#s,1 do
@@ -78,6 +91,7 @@ function M.new(options)
   end
 
   function Hyper.bulletlist(items,tight)
+    minetest.log("bulletlist")
     for i,str in ipairs(items) do
       table.insert(str, 1, "  •  ")
     end
@@ -85,6 +99,7 @@ function M.new(options)
   end
 
   function Hyper.orderedlist(items,tight)
+    minetest.log("orderedlist")
     for i,str in ipairs(items) do
       table.insert(str, 1, table.concat({" ",i,".  "}))
     end
@@ -92,10 +107,12 @@ function M.new(options)
   end
 
   function Hyper.link(label, uri, title)
+    minetest.log("link")
     return {"<u>",label,"</u>", " (<style color=",md2f.settings.link_color,">" , uri, "</style>) "}
   end
 
   function Hyper.image(label, src, title)
+    minetest.log("image")
     --parse the minetest data from the filename:
     local _,_,w,h,float = label[1]:find("(%d*),?(%d*),?([lr]*)")
     local _,_,filename = src:find("([%w%p]*)")

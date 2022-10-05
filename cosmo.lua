@@ -1,7 +1,7 @@
-local require = require
+local dofile = dofile
 
-local grammar = require "cosmo.grammar"
-local interpreter = require "cosmo.fill"
+local grammar = dofile(md2f.mp .."/cosmo/grammar.lua")
+local interpreter = dofile(md2f.mp .. "/cosmo/fill.lua")
 local loadstring = loadstring
 
 local cosmo = {}

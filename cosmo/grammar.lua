@@ -1,5 +1,5 @@
 -- Change lpeg to LuLPeg when applicable
-local lpeg = require"lunamark/lulpeg"
+local lpeg = dofile(md2f.mp .. "/lunamark/lulpeg.lua")
 local re = lpeg.re
 
 local grammar = {}

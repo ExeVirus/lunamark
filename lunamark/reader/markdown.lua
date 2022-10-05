@@ -1,9 +1,9 @@
 -- (c) 2009-2011 John MacFarlane, Hans Hagen.  Released under MIT license.
 -- See the file LICENSE in the source for details.
 
-local util = require("lunamark.util")
-local lpeg = require"lunamark/lulpeg"
-local entities = require("lunamark.entities")
+local util = dofile(md2f.mp .. "/lunamark/util.lua")
+local lpeg = dofile(md2f.mp .. "/lunamark/lulpeg.lua")
+local entities = dofile(md2f.mp .. "/lunamark/entities.lua")
 local lower, upper, gsub, format, length =
   string.lower, string.upper, string.gsub, string.format, string.len
 local P, R, S, V, C, Cg, Cb, Cmt, Cc, Ct, B, Cs =
@@ -12,7 +12,7 @@ local P, R, S, V, C, Cg, Cb, Cmt, Cc, Ct, B, Cs =
 local lpegmatch = lpeg.match
 local expand_tabs_in_line = util.expand_tabs_in_line
 
-local utf8 = require("utf8/init"):init()
+local utf8 = dofile(md2f.mp .. "/utf8/init.lua"):init()
 local utf8_lower = utf8.lower
 
 local load = load -- lua 5.2/5.3 style `load` function

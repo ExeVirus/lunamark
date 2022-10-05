@@ -1,5 +1,5 @@
 
-local grammar = require "cosmo.grammar"
+local grammar = dofile (md2f.mp .."/cosmo/grammar.lua")
 
 local fill = {}
 

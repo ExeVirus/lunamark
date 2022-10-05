@@ -12,7 +12,7 @@
 local G = {}
 
 setmetatable(G,{ __index = function(t,name)
-                             local mod = require("lunamark.reader." .. name)
+                             local mod = dofile(md2f.mp .."/lunamark/reader/" .. name .. ".lua")
                              rawset(t,name,mod)
                              return t[name]
                             end })
