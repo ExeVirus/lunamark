@@ -60,72 +60,99 @@ md2f.header = function()
 end
 
 to_parse = [=[
-# Level 1
-## Level 2
-### Level 3
-#### Level 4
-##### Level 5
-###### Level 6
+Introduction
+------------
 
-Paragraph 1 is a test paragaph, hopefully this is long enough to justify going to the next few lines.
+Content and functionality can be added to Minetest using Lua scripting
+in run-time loaded mods.
 
-This is another paragraph, should have worked.
+A mod is a self-contained bunch of scripts, textures and other related
+things, which is loaded by and interfaces with Minetest.
 
-```
-int a = 5;
-std::cout << a << std::endl;
-```
+Mods are contained and ran solely on the server side. Definitions and media
+files are automatically transferred to the client.
 
-**Bold Text**
+If you see a deficiency in the API, feel free to attempt to add the
+functionality in the engine and API, and to document it here.
 
-*Italics Text*
+Programming in Lua
+------------------
 
-***Bold and Italics***
+**If** you have any difficulty in understanding this, please read
+[Programming in Lua](http://www.lua.org/pil/).
 
-> Block quote attempt
+Startup
+-------
 
-> Multiline, and multi paragraph
->
-> Block Quote
+Mods are loaded during server startup from the mod load paths by running
+the `init.lua` scripts in a shared environment.
 
-1. Numbers will
-3. Be Somewhat difficult
-2. To support
+Paths
+-----
 
-- Unordered
-- Lists
-- Should be a breeze, hopefully
-* Personally, 
-* I think this should start a new 
-* list set
+Minetest keeps and looks for files mostly in two paths. `path_share` or `path_user`.
 
+`path_share` contains possibly read-only content for the engine (incl. games and mods).
+`path_user` contains mods or games installed by the user but also the users
+worlds or settings.
 
-`test`
-`test`
+With a local build (`RUN_IN_PLACE=1`) `path_share` and `path_user` both point to
+the build directory. For system-wide builds on Linux the share path is usually at
+`/usr/share/minetest` while the user path resides in `.minetest` in the home directory.
+Paths on other operating systems will differ.
 
-![24,24](text)
-![36,36](text2)
-![48,48](text3)
+Games
+=====
 
-Nested `code text` should be monospaced
+Games are looked up from:
 
-These
+* `$path_share/games/<gameid>/`
+* `$path_user/games/<gameid>/`
 
---- 
+Where `<gameid>` is unique to each game.
 
-Should
+The game directory can contain the following files:
 
-*** 
-
-All be lines
-
-_______
-
-<htts://www.google.com>
-
-----------
-----------
-
+* `game.conf`, with the following keys:
+    * `title`: Required, a human-readable title to address the game, e.g. `title = Minetest Game`.
+    * `name`: (Deprecated) same as title.
+    * `description`: Short description to be shown in the content tab
+    * `allowed_mapgens = <comma-separated mapgens>`
+      e.g. `allowed_mapgens = v5,v6,flat`
+      Mapgens not in this list are removed from the list of mapgens for the
+      game.
+      If not specified, all mapgens are allowed.
+    * `disallowed_mapgens = <comma-separated mapgens>`
+      e.g. `disallowed_mapgens = v5,v6,flat`
+      These mapgens are removed from the list of mapgens for the game.
+      When both `allowed_mapgens` and `disallowed_mapgens` are
+      specified, `allowed_mapgens` is applied before
+      `disallowed_mapgens`.
+    * `disallowed_mapgen_settings= <comma-separated mapgen settings>`
+      e.g. `disallowed_mapgen_settings = mgv5_spflags`
+      These mapgen settings are hidden for this game in the world creation
+      dialog and game start menu. Add `seed` to hide the seed input field.
+    * `disabled_settings = <comma-separated settings>`
+      e.g. `disabled_settings = enable_damage, creative_mode`
+      These settings are hidden for this game in the "Start game" tab
+      and will be initialized as `false` when the game is started.
+      Prepend a setting name with an exclamation mark to initialize it to `true`
+      (this does not work for `enable_server`).
+      Only these settings are supported:
+          `enable_damage`, `creative_mode`, `enable_server`.
+    * `author`: The author of the game. It only appears when downloaded from
+                ContentDB.
+    * `release`: Ignore this: Should only ever be set by ContentDB, as it is
+                 an internal ID used to track versions.
+* `minetest.conf`:
+  Used to set default settings when running this game.
+* `settingtypes.txt`:
+  In the same format as the one in builtin.
+  This settingtypes.txt will be parsed by the menu and the settings will be
+  displayed in the "Games" category in the advanced settings tab.
+* If the game contains a folder called `textures` the server will load it as a
+  texturepack, overriding mod textures.
+  Any server texturepack will override mod textures and the game texturepack.
 ]=]
 
 -- Opens a file in append mode

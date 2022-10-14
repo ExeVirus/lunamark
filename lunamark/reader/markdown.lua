@@ -147,16 +147,9 @@ end
 
 parsers.bulletchar = C(parsers.plus + parsers.asterisk + parsers.dash)
 
-parsers.bullet     = ( parsers.bulletchar * #parsers.spacing
-                                          * (parsers.tab + parsers.space^-3)
-                     + parsers.space * parsers.bulletchar * #parsers.spacing
-                                     * (parsers.tab + parsers.space^-2)
-                     + parsers.space * parsers.space * parsers.bulletchar
-                                     * #parsers.spacing
-                                     * (parsers.tab + parsers.space^-1)
-                     + parsers.space * parsers.space * parsers.space
-                                     * parsers.bulletchar * #parsers.spacing
-                     )
+parsers.bullet     = ( parsers.bulletchar * (parsers.tab + parsers.space * parsers.space^-2)
+                     + parsers.space * parsers.bulletchar * (parsers.tab + parsers.space * parsers.space^-1)
+                     + parsers.space * parsers.space * parsers.bulletchar * (parsers.tab + parsers.space))
 
 -----------------------------------------------------------------------------
 -- Parsers used for markdown code spans
@@ -491,7 +484,7 @@ parsers.Apostrophe   = parsers.squote * B(parsers.nonspacechar*1, 2) / "’"
 -- parse many p between starter and ender
 parsers.between = function(p, starter, ender)
   local ender2 = B(parsers.nonspacechar) * ender
-  return (starter * #parsers.nonspacechar * Ct(p * (p - ender2)^0) * ender2)
+  return (starter * Ct(p * (p - ender2)^0) * ender2)
 end
 
 parsers.urlchar = parsers.anyescaped - parsers.newline - parsers.more
@@ -550,8 +543,12 @@ parsers.pandoc_author = parsers.spacechar * parsers.optionalspace
 ------------------------------------------------------------------------------
 
 -- parse Atx heading start and return level
-parsers.HeadingStart = #parsers.hash * C(parsers.hash^-6)
-                     * -parsers.hash / length
+parsers.HeadingStart = C(parsers.hash * parsers.hash * parsers.hash * parsers.hash * parsers.hash * parsers.hash +
+                         parsers.hash * parsers.hash * parsers.hash * parsers.hash * parsers.hash + 
+                         parsers.hash * parsers.hash * parsers.hash * parsers.hash + 
+                         parsers.hash * parsers.hash * parsers.hash + 
+                         parsers.hash * parsers.hash + 
+                         parsers.hash) * -parsers.hash / length
 
 -- parse setext header ending and return level
 parsers.HeadingLevel = parsers.equal^1 * Cc(1) + parsers.dash^1 * Cc(2)
@@ -732,7 +729,7 @@ function M.new(writer, options)
                      + C(larsers.dig^2 * parsers.period) * #parsers.spacing
                                        * (parsers.tab + parsers.space^1)
                      + C(larsers.dig * parsers.period) * #parsers.spacing
-                                     * (parsers.tab + parsers.space^-2)
+                                     * (parsers.tab + (parsers.space + parsers.space * parsers.space))
                      + parsers.space * C(larsers.dig^2 * parsers.period)
                                      * #parsers.spacing
                      + parsers.space * C(larsers.dig * parsers.period)
@@ -868,7 +865,7 @@ function M.new(writer, options)
   -- Inline elements (local)
   ------------------------------------------------------------------------------
 
-  larsers.Str      = (larsers.normalchar^1 * (larsers.specialchar * larsers.normalchar^1)^1 + larsers.normalchar^1) / writer.string
+  larsers.Str      = larsers.normalchar^1 / writer.string
 
   larsers.Ellipsis = P("...") / writer.ellipsis
   
@@ -1074,7 +1071,6 @@ function M.new(writer, options)
                        * parsers.newline
                        * ( parsers.blankline^1
                          + parsers.hash
-                         + #(parsers.leader * parsers.more * parsers.space^-1)
                          )
                        / writer.paragraph
 
@@ -1121,7 +1117,7 @@ function M.new(writer, options)
                        * parsers.skipblanklines * -parsers.bullet
                        + Ct(larsers.LooseListItem(parsers.bullet)^1) * Cc(false)
                        * parsers.skipblanklines )
-                     / writer.bulletlist
+                       / writer.bulletlist
 
   local function ordered_list(s,tight,startnum)
     if options.startnum then
@@ -1235,8 +1231,7 @@ function M.new(writer, options)
                     / writer.header
 
   -- parse setext header
-  larsers.SetextHeader = #(parsers.line * S("=-"))
-                       * Ct(parsers.line / parse_inlines)
+  larsers.SetextHeader = Ct(parsers.line / parse_inlines)
                        * parsers.HeadingLevel
                        * parsers.optionalspace * parsers.newline
                        / writer.header
@@ -1275,7 +1270,7 @@ function M.new(writer, options)
       HorizontalRule        = larsers.HorizontalRule,
       BulletList            = larsers.BulletList,
       OrderedList           = larsers.OrderedList,
-      Header                = larsers.AtxHeader + larsers.SetextHeader,
+      Header                = larsers.SetextHeader + larsers.AtxHeader,
       DefinitionList        = larsers.DefinitionList,
       DisplayHtml           = larsers.DisplayHtml,
       Paragraph             = larsers.Paragraph,

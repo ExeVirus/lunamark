@@ -41,6 +41,22 @@ local escape = util.escaper {
     [string.char(31)] = "",
 }
 
+local function handleNesting(text) {
+    -- get all starting positions
+    -- get all ending positions
+    -- combine into two arrays, one of positions, and one of true/false for start/end
+    -- iterate over the positions array
+        -- If start, denote current level, and remove \003
+            -- if level is second or deeper
+                -- 
+        -- else end, decrease current level, and remove \004
+    --local function getLines(s)
+    --    if s:sub(-1)~="\n" then s=s.."\n" end
+    --    return s:gmatch("(.-)\n")
+    --end
+    --for line in getLines(text) do
+}
+
 local function parse(text,settings)
     md2f.settings = {}
     md2f.settings.width = settings.width

@@ -14,7 +14,7 @@ local newlinetab = "\n" .. tab
 local ctab = nbsp .. nbsp
 local cnewlinetab = "\n" .. ctab
 
-minetest = minetest or {}
+local minetest = minetest or {}
 minetest.log = minetest.log or print
 
 --- Returns a new Hypertext writer.
@@ -73,7 +73,6 @@ function M.new(options)
     if level == 0 then
       return s
     end
-    minetest.log("header: " .. level)
     return {"<style size=",md2f.settings[table.concat({"heading_",level,"_size"})]," color=",md2f.settings[table.concat({"heading_",level,"_color"})],">",s,"</style>"}
   end
 
@@ -90,18 +89,23 @@ function M.new(options)
     return {"<style color=",md2f.settings.block_quote_color,">", s, "</style>"}
   end
 
+  local function listitem(s)
+    return {table.concat({nbsp,"•",nbsp}), s}
+  end
+
   function Hyper.bulletlist(items,tight)
     minetest.log("bulletlist")
     for i,str in ipairs(items) do
-      table.insert(str, 1, "  •  ")
+        table.insert(str, 1, table.concat({nbsp,"•",nbsp}))
     end
-    return util.intersperse(items,Hyper.linebreak)
+    -- 003 and 004 designate start and end of lists, for post-processing nested lists
+    return {"\003\n",util.intersperse(items,Hyper.linebreak),"\n\004"} 
   end
 
   function Hyper.orderedlist(items,tight)
     minetest.log("orderedlist")
     for i,str in ipairs(items) do
-      table.insert(str, 1, table.concat({" ",i,".  "}))
+      table.insert(str, 1, table.concat({i,".",nbsp}))
     end
     return util.intersperse(items,Hyper.linebreak)
   end
