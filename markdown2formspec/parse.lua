@@ -41,21 +41,26 @@ local escape = util.escaper {
     [string.char(31)] = "",
 }
 
-local function handleNesting(text) {
-    -- get all starting positions
-    -- get all ending positions
-    -- combine into two arrays, one of positions, and one of true/false for start/end
-    -- iterate over the positions array
-        -- If start, denote current level, and remove \003
-            -- if level is second or deeper
-                -- 
-        -- else end, decrease current level, and remove \004
-    --local function getLines(s)
-    --    if s:sub(-1)~="\n" then s=s.."\n" end
-    --    return s:gmatch("(.-)\n")
-    --end
-    --for line in getLines(text) do
-}
+
+-- Relatively Short, very smart function, that adds necessary tabs to tabbed stuff
+-- accomplished via gsub, i.e. a callback everytime the special 
+-- two characters 0x03, and 0x04 are found. One is indent more, and the other
+-- is indent less. 
+local function handleNesting(text)
+    local non_breaking_space_2x = string.format("%s","\160") .. string.format("%s","\160")
+    local indent = 0
+    text = string.gsub(text, "\n([\003\004])", "%1")
+    return string.gsub(text, "([\003\004])([^\003\004]*)", 
+        function(indent_variable, text_needing_tabbed)
+            if indent_variable == "\003" then
+                indent = indent + 1
+            else
+                indent = math.max((indent - 1),0)
+            end
+            return string.gsub(text_needing_tabbed, "\n", "\n".. string.rep(non_breaking_space_2x, indent))
+        end
+    )
+end
 
 local function parse(text,settings)
     md2f.settings = {}
@@ -82,7 +87,7 @@ local function parse(text,settings)
     md2f.settings.block_quote_color = settings.block_quote_color or "#FFA"
 
     --execute read-write of provided text
-    return formspec_parse(escape(text))
+    return handleNesting(formspec_parse(escape(text)))
 end
 
 return parse
