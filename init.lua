@@ -13,11 +13,28 @@
 ----------------------------global namespace---------------------------
 md2f = {}
 
-md2f.mp = "C:/Users/ddsal/Desktop/Minetest/minetest-5.6.1-win64/mods/markdown2formspec2"
+md2f.mp = minetest.get_modpath("markdown2formspec")
 
+-- This include is the core parsing function
+-- markdown2formspec/formspec_writer.lua is where you want to go to modify the output
 local parse = dofile(md2f.mp .. "/markdown2formspec/parse.lua")
 
+-- loadFile()
+--
+-- Loads a given file and returns the text (in binary mode)
+--
+-- filename: the markdown filename to load
+local function loadFile(filename)
+  local file = io.open(filename, "rb") -- r read mode and b binary mode
+  if not file then return nil end
+  local content = file:read "*a" -- *a or *all reads the whole file
+  file:close()
+  return content
+end
+
 -- md2f()
+--
+-- Processes the given markdown text into hypertext formspec data
 --
 -- x: position of hypertext[] element
 -- y: position of hypertext[] element
@@ -40,6 +57,8 @@ end
 
 -- md2ff()
 --
+-- Processes the given markdown file into text and converts the text to formspec hypertext data
+--
 -- x: position of hypertext[] element
 -- y: position of hypertext[] element
 -- w: width of hypertext element. roughly 60 pixels per 1 unit
@@ -57,4 +76,11 @@ end
 -- Default formspec header for the lazy
 md2f.header = function()
 	return "formspec_version[4]size[20,20]position[0.5,0.5]bgcolor[#111E]\n"
+end
+
+-- footer()
+--
+-- Default footer for the lazy
+local function footer()
+  return "]"
 end

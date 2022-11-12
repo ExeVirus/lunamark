@@ -47,8 +47,8 @@ local escape = util.escaper {
 -- two characters 0x03, and 0x04 are found. One is indent more, and the other
 -- is indent less. 
 local function handleNesting(text)
-    local non_breaking_space_2x = string.format("%s","\160") .. string.format("%s","\160")
     local indent = 0
+    local tab = string.rep(string.format("%s","\160"),md2f.settings.tab_size)
     text = string.gsub(text, "\n([\003\004])", "%1")
     return string.gsub(text, "([\003\004])([^\003\004]*)", 
         function(indent_variable, text_needing_tabbed)
@@ -57,7 +57,7 @@ local function handleNesting(text)
             else
                 indent = math.max((indent - 1),0)
             end
-            return string.gsub(text_needing_tabbed, "\n", "\n".. string.rep(non_breaking_space_2x, indent))
+            return string.gsub(text_needing_tabbed, "\n", "\n".. string.rep(tab, indent))
         end
     )
 end
@@ -85,6 +85,7 @@ local function parse(text,settings)
     md2f.settings.code_block_font_size = settings.code_block_font_size or 14
     md2f.settings.mono_color = settings.mono_color or "#6F6"
     md2f.settings.block_quote_color = settings.block_quote_color or "#FFA"
+    md2f.settings.tab_size = settings.tab_size or 1
 
     --execute read-write of provided text
     return handleNesting(formspec_parse(escape(text)))

@@ -9,18 +9,10 @@ local M = {}
 local generic = dofile(md2f.mp .. "/lunamark/writer/generic.lua")
 local util = dofile(md2f.mp .. "/lunamark/util.lua")
 local nbsp = string.format("%s","\160")
-local tab = nbsp..nbsp..nbsp..nbsp
-local newlinetab = "\n" .. tab
-local ctab = nbsp .. nbsp
-local cnewlinetab = "\n" .. ctab
-
-local minetest = minetest or {}
-minetest.log = minetest.log or print
 
 --- Returns a new Hypertext writer.
 -- For a list of fields, see [lunamark.writer.generic].
 function M.new(options)
-  local md2f = md2f
   options = options or {}
   local Hyper = generic.new(options)
 
@@ -36,8 +28,10 @@ function M.new(options)
   Hyper.citation = escape
   Hyper.verbatim = function(s)
     local _, count = string.gsub(s, "\n", "")
+    minetest.log("TABSIZE = " .. md2f.settings.tab_size .. ":: NBSP: " .. nbsp)
+    local tab = string.rep(nbsp, md2f.settings.tab_size)
     return table.concat({"<mono><style color=",md2f.settings.code_block_mono_color," size=",md2f.settings.code_block_font_size,">",
-                          ctab,escape(s):gsub("\n",cnewlinetab,count-1),
+                          tab,escape(s):gsub("\n","\n" .. tab,count-1),
                         "</style></mono>"})
   end
   function Hyper.code(s)
@@ -78,11 +72,12 @@ function M.new(options)
 
   function Hyper.blockquote(s)
     minetest.log("blockquote")
-    --tab over 4 spaces for offset
+    --tab over
+    local tab = string.rep(nbsp, md2f.settings.tab_size)
     table.insert(s[1],1,tab)
     for i=2,#s,1 do
       if s[i] == "\n" then
-        s[i] = newlinetab
+        s[i] = "\n" .. tab
       end
     end
 

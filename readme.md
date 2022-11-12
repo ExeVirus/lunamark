@@ -36,11 +36,13 @@ settings = {
     code_block_font_size = 14,
     mono_color = "#6F6",
     block_quote_color = "#FFA",
+    tab_size = 1,
 }
 ```
 
 ### Notes
 
 1. All images will be centered
-2. Images have extra syntax: `![w,h](image.png)` will result in an image scaled to those provided dimensions in pixels.
+2. Images have extra syntax: `![w,h,(l or r)](image.png)` will result in an image scaled to those provided dimensions in pixels. 
+    a. either l or r (optionally) floats the image left or right; no l or r means it will be centered
 3. Headings are not auto-bolded or auto underlined
