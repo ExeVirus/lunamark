@@ -28,19 +28,19 @@ function M.new(options)
   Hyper.citation = escape
   Hyper.verbatim = function(s)
     local _, count = string.gsub(s, "\n", "")
-    minetest.log("TABSIZE = " .. md2f.settings.tab_size .. ":: NBSP: " .. nbsp)
+    minetest.log("verbose", "TABSIZE = " .. md2f.settings.tab_size .. ":: NBSP: " .. nbsp)
     local tab = string.rep(nbsp, md2f.settings.tab_size)
     return table.concat({"<mono><style color=",md2f.settings.code_block_mono_color," size=",md2f.settings.code_block_font_size,">",
                           tab,escape(s):gsub("\n","\n" .. tab,count-1),
                         "</style></mono>"})
   end
   function Hyper.code(s)
-    minetest.log("code")
+    minetest.log("verbose","code")
     return {"<mono><style color=",md2f.settings.mono_color,">",escape(s),"</style></mono>"}
   end
 
   function Hyper.fenced_code(s)
-    minetest.log("fenced_code")
+    minetest.log("verbose","fenced_code")
     return Hyper.verbatim(s)
   end
   
@@ -49,17 +49,17 @@ function M.new(options)
   end
 
   function Hyper.emphasis(s)
-    minetest.log("emphasis")
+    minetest.log("verbose","emphasis")
     return {"<i>",s,"</i>"}
   end
 
   function Hyper.strong(s)
-    minetest.log("strong")
+    minetest.log("verbose","strong")
     return  {"<b>",s,"</b>"}
   end
 
   function Hyper.strong_emphasis(s)
-    minetest.log("strong emphasis")
+    minetest.log("verbose","strong emphasis")
     return {"<b><i>",s,"</b></i>"}
   end
 
@@ -71,7 +71,7 @@ function M.new(options)
   end
 
   function Hyper.blockquote(s)
-    minetest.log("blockquote")
+    minetest.log("verbose","blockquote")
     --tab over
     local tab = string.rep(nbsp, md2f.settings.tab_size)
     table.insert(s[1],1,tab)
@@ -89,7 +89,7 @@ function M.new(options)
   end
 
   function Hyper.bulletlist(items,tight)
-    minetest.log("bulletlist")
+    minetest.log("verbose","bulletlist")
     for i,str in ipairs(items) do
         table.insert(str, 1, table.concat({nbsp,"•",nbsp}))
     end
@@ -98,7 +98,7 @@ function M.new(options)
   end
 
   function Hyper.orderedlist(items,tight)
-    minetest.log("orderedlist")
+    minetest.log("verbose","orderedlist")
     for i,str in ipairs(items) do
       table.insert(str, 1, table.concat({i,".",nbsp}))
     end
@@ -106,12 +106,12 @@ function M.new(options)
   end
 
   function Hyper.link(label, uri, title)
-    minetest.log("link")
+    minetest.log("verbose","link")
     return {"<u>",label,"</u>", " (<style color=",md2f.settings.link_color,">" , uri, "</style>) "}
   end
 
   function Hyper.image(label, src, title)
-    minetest.log("image")
+    minetest.log("verbose","image")
     --parse the minetest data from the filename:
     local _,_,w,h,float = label[1]:find("(%d*),?(%d*),?([lr]*)")
     local _,_,filename = src:find("([%w%p]*)")

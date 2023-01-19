@@ -45,7 +45,7 @@ end
 -- settings: color and sizing config table of settings
 md2f.md2f = function(x,y,w,h,text,name,settings)
     if text == nil then
-        minetest.log("markdown2formspec: No text provided")
+        minetest.log("warning","markdown2formspec: No text provided")
         return ""
     end
     name = name or "markdown"
