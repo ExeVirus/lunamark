@@ -8,7 +8,7 @@ local M = {}
 
 local generic = dofile(md2f.mp .. "/lunamark/writer/generic.lua")
 local util = dofile(md2f.mp .. "/lunamark/util.lua")
-local nbsp = string.format("%s","\160")
+local nbsp = string.format("%s"," ")
 
 --- Returns a new Hypertext writer.
 -- For a list of fields, see [lunamark.writer.generic].
@@ -64,6 +64,7 @@ function M.new(options)
   end
 
   function Hyper.header(s,level)
+    minetest.log("verbose", "header level="..tostring(level))
     if level == 0 then
       return s
     end
