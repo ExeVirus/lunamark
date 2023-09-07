@@ -48,9 +48,9 @@ local escape = util.escaper {
 -- is indent less. 
 local function handleNesting(text)
     local indent = 0
-    local tab = string.rep(string.format("%s","\160"),md2f.settings.tab_size)
+    local tab = string.rep(string.format("%s"," "),md2f.settings.tab_size)
     text = string.gsub(text, "\n([\003\004])", "%1")
-    return string.gsub(text, "([\003\004])([^\003\004]*)", 
+    return string.gsub(text, "([\003\004])([^\003\004]*)",
         function(indent_variable, text_needing_tabbed)
             if indent_variable == "\003" then
                 indent = indent + 1
